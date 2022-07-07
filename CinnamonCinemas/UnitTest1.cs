@@ -65,15 +65,11 @@ namespace CinnamonCinemas
             CinemaSeatMap cinemaseatmap = new();
             cinemaseatmap.GetCinemaSeatMap();
 
-            Console.WriteLine("NumberOfAvailabeSeats: {0}", cinemaseatmap.ReturnNumberOfAvailableSeats());
-
             cinemaseatmap.ReturnNumberOfAvailableSeats().Should().Be(DEFAULTNUMBEROFSEATS);
 
             //now, let's check we can decrement the number of seats available for sale ...
 
             cinemaseatmap.UpdateNumberOfAvailabeSeats(3).Should().Be(12);
-
-            Console.WriteLine("NumberOfAvailabeSeats: {0}", cinemaseatmap.ReturnNumberOfAvailableSeats());
         }
 
         [Test]
@@ -104,27 +100,30 @@ namespace CinnamonCinemas
                 {
                     Console.WriteLine("All seats sold");
 
+                    
                     break;
-                }
-
-                Console.WriteLine("NumberOfAvailabeSeats: {0}", NoOfUnsoldSeats);
-
-                StringBuilder StatusOfBooking = cinemaseatmap.BookSeats(NoOfSeatsRequested, NoOfUnsoldSeats, cinemaseatmap);
-                BookingReturnString = StatusOfBooking.ToString();
-
-                BookingReturnString.Should().StartWith("ADVISORY"); // Valid transactions attempts return a string starting with "ADVISORY" ...
-
-                if (BookingReturnString.Equals("ADVISORY: 001"))
-                {
-                    // Console.WriteLine("Insufficient seats available to fulfill booking request: Seats Requested {0}, Seats Available {1}", NoOfSeatsRequested, NoOfUnsoldSeats);
-
-                    Console.WriteLine("Seats Requested {0}, Seats Available {1}", NoOfSeatsRequested, NoOfUnsoldSeats);
                 }
                 else
                 {
-                    Console.WriteLine("statusOfBooking: {0}", StatusOfBooking);
-                    cinemaseatmap.ReturnNumberOfAvailableSeats(); // Previously tested successfully
-                    Console.WriteLine("ReturnNumberOfAvailableSeats: {0}", cinemaseatmap.ReturnNumberOfAvailableSeats());
+                    Console.WriteLine("NumberOfAvailabeSeats: {0}", NoOfUnsoldSeats);
+
+                    StringBuilder StatusOfBooking = cinemaseatmap.BookSeats(NoOfSeatsRequested, NoOfUnsoldSeats, cinemaseatmap);
+                    BookingReturnString = StatusOfBooking.ToString();
+
+                    BookingReturnString.Should().StartWith("ADVISORY"); // Valid transactions attempts return a string starting with "ADVISORY" ...
+
+                    if (BookingReturnString.Equals("ADVISORY: 001"))
+                    {
+                        // Console.WriteLine("Insufficient seats available to fulfill booking request: Seats Requested {0}, Seats Available {1}", NoOfSeatsRequested, NoOfUnsoldSeats);
+
+                        Console.WriteLine("Seats Requested {0}, Seats Available {1}", NoOfSeatsRequested, NoOfUnsoldSeats);
+                    }
+                    else
+                    {
+                        Console.WriteLine("statusOfBooking: {0}", StatusOfBooking);
+                        cinemaseatmap.ReturnNumberOfAvailableSeats(); // Previously tested successfully
+                        Console.WriteLine("ReturnNumberOfAvailableSeats: {0}", cinemaseatmap.ReturnNumberOfAvailableSeats());
+                    }
                 }
             } while (NoOfUnsoldSeats > 0);
         }
